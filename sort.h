@@ -6,6 +6,13 @@
 #include <stdio.h>
 
 /* Data structure for doubly linked list */
+/**
+ * struct listint_s - Doubly linked list node
+ *
+ * @n: Integer sored in the node
+ * @prev: Pointer to the previous element of the list
+ * @next: Pointer to the next element of the list
+ */
 typedef struct listint_s
 {
         const int n;
