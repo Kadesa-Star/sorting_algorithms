@@ -7,66 +7,42 @@
  */
 void swap(int *a, int *b)
 {
-	int temp;
-
-	temp = *a;
+	int temp = *a;
 	*a = *b;
 	*b = temp;
 }
 
 /**
- * lomuto_partition - Partitions the array using the Lomuto partition scheme.
+ * partition - Partitions the array using the Lomuto partition scheme.
  * @array: The array to partition.
- * @low: The starting index of the partition.
- * @high: The ending index of the partition.
  * @size: The size of the array (for printing purposes).
  *
  * Return: The index of the pivot element after partitioning.
  */
-int lomuto_partition(int *array, int low, int high, size_t size)
+size_t partition(int *array, size_t size)
 {
-	int pivot = array[high];
-	int i = low - 1;
-	int j;
+	int pivot = array[size - 1];
+	size_t i = (size_t)-1;
+	size_t j;
 
-	for (j = low; j < high; j++)
+	for (j = 0; j < size - 1; j++)
 	{
 		if (array[j] <= pivot)
 		{
+			i++;
 			if (i != j)
 			{
 				swap(&array[i], &array[j]);
 				print_array(array, size);
 			}
-			i++;
 		}
 	}
-	if (i + 1 != high)
+	if (i + 1 != size - 1)
 	{
-		swap(&array[i + 1], &array[high]);
+		swap(&array[i + 1], &array[size - 1]);
 		print_array(array, size);
 	}
 	return (i + 1);
-}
-
-/**
- * quicksort_recursive - Recursively sorts the array using Quick sort.
- * @array: The array to sort.
- * @low: The starting index of the partition.
- * @high: The ending index of the partition.
- * @size: The size of the array (for printing purposes).
- */
-void quicksort_recursive(int *array, int low, int high, size_t size)
-{
-	int pivot_index;
-
-	if (low < high)
-	{
-		pivot_index = lomuto_partition(array, low, high, size);
-
-		quicksort_recursive(array, low, pivot_index - 1, size);
-		quicksort_recursive(array, pivot_index + 1, high, size);
-	}
 }
 
 /**
@@ -77,8 +53,15 @@ void quicksort_recursive(int *array, int low, int high, size_t size)
  */
 void quick_sort(int *array, size_t size)
 {
-	if (size < 2)
+	size_t pivot;
+
+	if (!array || size < 2)
 		return;
 
-	quicksort_recursive(array, 0, size - 1, size);
+	/* Partition the array and get the pivot index */
+	pivot = partition(array, size);
+
+	/* Recursively sort the elements before and after the pivot */
+	quick_sort(array, pivot);
+	quick_sort(array + pivot, size - pivot);
 }
